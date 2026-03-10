@@ -1,33 +1,72 @@
 ---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BibleNav from '../../../components/BibleNav.astro';
+import BibleReader from '../../../components/BibleReader.astro';
 import bibleStructure from '../../../data/bible-structure.json';
+import { readFileSync, existsSync } from 'fs';
+import { join } from 'path';
 
-// Lightweight redirect pages — send users to the SPA reader at /bible/#book/chapter
-export function getStaticPaths() {
+export async function getStaticPaths() {
   const paths = [];
   const allBooks = [...bibleStructure.testament.OT, ...bibleStructure.testament.NT];
   for (const book of allBooks) {
     for (let ch = 1; ch <= book.chapters; ch++) {
-      paths.push({ params: { book: book.slug, chapter: String(ch) } });
+      paths.push({
+        params: { book: book.slug, chapter: String(ch) },
+        props: { bookData: book },
+      });
     }
   }
   return paths;
 }
 
-const { book, chapter } = Astro.params;
-const target = `/the-upper-room/bible/#${book}/${chapter}`;
+const { book: bookSlug, chapter: chapterStr } = Astro.params;
+const { bookData } = Astro.props;
+const chapter = parseInt(chapterStr, 10);
+
+const cacheFile = join(process.cwd(), 'src', 'data', 'esv-cache', `${bookSlug}-${chapter}.json`);
+
+let passageHtml = '';
+let wordCount = 0;
+
+if (existsSync(cacheFile)) {
+  try {
+    const cached = JSON.parse(readFileSync(cacheFile, 'utf8'));
+    passageHtml = cached.html ?? '';
+    if (passageHtml) {
+      const textContent = passageHtml.replace(/<[^>]+>/g, ' ');
+      wordCount = textContent.trim().split(/\s+/).filter(Boolean).length;
+    }
+  } catch {
+    passageHtml = '';
+  }
+}
+
+const hasCachedContent = !!passageHtml;
+const spaFallback = `/the-upper-room/bible/#${bookSlug}/${chapter}`;
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content={`0; url=${target}`} />
-  <title>Bible Reader — The Upper Room</title>
-  <link rel="manifest" href="/the-upper-room/manifest.json" />
-  <meta name="theme-color" content="#3d2b1f" />
-</head>
-<body style="background:#faf4e8; font-family:'EB Garamond',Georgia,serif; text-align:center; padding:3rem;">
-  <p style="color:#8a5225; font-style:italic;">Loading Bible reader…</p>
-  <script define:vars={{ target }}>window.location.replace(target);</script>
-</body>
-</html>
+<BaseLayout
+  title={`${bookData.name} ${chapter}`}
+  description={`Read ${bookData.name} chapter ${chapter} in the English Standard Version (ESV) Bible.`}
+  path={`/bible/${bookSlug}/${chapter}/`}
+>
+  {hasCachedContent ? (
+    <>
+      <BibleNav currentBook={bookSlug} currentChapter={chapter} />
+      <BibleReader
+        passageHtml={passageHtml}
+        bookName={bookData.name}
+        chapter={chapter}
+        wordCount={wordCount}
+      />
+    </>
+  ) : (
+    <div style="text-align:center; padding:3rem; font-family:'EB Garamond',Georgia,serif;">
+      <p style="color:#8a5225; font-style:italic;">Loading {bookData.name} {chapter}…</p>
+      <script define:vars={{ spaFallback }}>
+        window.location.replace(spaFallback);
+      </script>
+    </div>
+  )}
+</BaseLayout>
