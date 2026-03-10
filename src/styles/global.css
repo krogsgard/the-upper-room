@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,opsz,wght@0,12..72,400;0,12..72,500;0,12..72,600;0,12..72,700;1,12..72,400;1,12..72,500;1,12..72,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --upper-parchment: #fdf8f0;
+  --upper-cream: #faf4e8;
+  --upper-gold: #b8860b;
+  --upper-gold-light: #d4a017;
+  --upper-brown: #3d2b1f;
+  --upper-dark: #2a1a10;
+  --upper-lent: #6b2d3e;
+  --upper-ink: #1a0f08;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-serif text-brown-900 bg-parchment-50;
+    font-size: 1.125rem;
+    line-height: 1.75;
+    background-color: var(--upper-cream);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  blockquote {
+    @apply border-l-4 border-gold-500 pl-6 italic text-brown-800;
+  }
+}
+
+@layer components {
+  .container-upper {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-gold-500 text-cream font-display font-semibold text-sm tracking-wide uppercase rounded-sm hover:bg-gold-600 transition-colors duration-200;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-6 py-3 border border-gold-500 text-gold-600 font-display font-semibold text-sm tracking-wide uppercase rounded-sm hover:bg-gold-500 hover:text-cream transition-colors duration-200;
+  }
+
+  .section-rule {
+    @apply border-t border-parchment-300 my-12;
+  }
+
+  .card-parchment {
+    @apply bg-parchment-100 border border-parchment-200 rounded-sm p-6;
+  }
+
+  .text-label {
+    @apply text-xs font-display font-semibold tracking-widest uppercase text-parchment-600;
+  }
+
+  .woc {
+    color: #8b0000;
+  }
+}
+
+/* Pagefind */
+.pagefind-ui {
+  --pagefind-ui-font: 'EB Garamond', Georgia, serif;
+  --pagefind-ui-primary: var(--upper-gold);
+  --pagefind-ui-text: var(--upper-ink);
+  --pagefind-ui-background: var(--upper-cream);
+  --pagefind-ui-border: #e0d4be;
+  --pagefind-ui-tag: var(--upper-parchment);
+}
+
+/* Lent purple accent */
+.season-lent {
+  border-color: var(--upper-lent);
+}
+
+/* Decorative dropcap */
+.dropcap::first-letter {
+  font-size: 4em;
+  line-height: 0.85;
+  float: left;
+  margin-right: 0.1em;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  color: var(--upper-gold);
+}
+
+/* Red letter words of Christ */
+woc, .woc {
+  color: #8b1a1a;
+}
+
+/* Nav link */
+.nav-link {
+  @apply text-parchment-700 hover:text-brown-900 font-display text-sm tracking-wide transition-colors duration-200;
+}
+
+.nav-link.active {
+  @apply text-brown-900 border-b border-gold-500;
+}

@@ -1,0 +1,60 @@
+---
+import quotes from '../data/quotes.json';
+
+// Select quote deterministically by day of year
+const now = new Date();
+const start = new Date(now.getFullYear(), 0, 0);
+const diff = now.getTime() - start.getTime();
+const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+const quote = quotes[dayOfYear % quotes.length];
+
+const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const dateStr = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+---
+
+<section class="relative py-20 md:py-28 overflow-hidden bg-brown-900">
+  <!-- Decorative background -->
+  <div class="absolute inset-0 opacity-5" style="background-image: url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4a017' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"></div>
+  <!-- Gold top border -->
+  <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent"></div>
+
+  <div class="container-upper relative">
+    <div class="max-w-3xl mx-auto text-center">
+      <!-- Date & season label -->
+      <div class="flex items-center justify-center gap-3 mb-8">
+        <span class="text-gold-400 text-xs">✦</span>
+        <p class="text-label text-parchment-400">{dateStr}</p>
+        <span class="text-gold-400 text-xs">✦</span>
+      </div>
+
+      <!-- Quote mark -->
+      <div class="text-gold-500 text-8xl font-display leading-none mb-2 opacity-40" aria-hidden="true">"</div>
+
+      <!-- Quote text -->
+      <blockquote class="border-none pl-0 not-italic">
+        <p class="font-serif text-2xl md:text-3xl lg:text-4xl text-parchment-100 leading-relaxed italic font-medium mb-8">
+          {quote.text}
+        </p>
+        <footer class="flex flex-col items-center gap-1">
+          <cite class="font-display font-semibold text-parchment-200 not-italic text-lg">
+            {quote.author}
+          </cite>
+          {quote.source && (
+            <span class="text-parchment-500 text-sm">{quote.source}</span>
+          )}
+        </footer>
+      </blockquote>
+
+      <!-- Theme badge -->
+      <div class="mt-8">
+        <span class="inline-block px-3 py-1 bg-parchment-800/20 border border-parchment-700/30 text-parchment-500 text-xs font-display tracking-widest uppercase rounded-sm">
+          {quote.theme}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gold bottom border -->
+  <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent"></div>
+</section>

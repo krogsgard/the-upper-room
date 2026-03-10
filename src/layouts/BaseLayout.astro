@@ -1,0 +1,245 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  path?: string;
+}
+
+const {
+  title,
+  description = 'The Upper Room — a devotional reading companion for the thoughtful Christian. Daily quotes, Scripture study, and theological reflection.',
+  ogImage = '/the-upper-room/images/og-default.png',
+  path = '',
+} = Astro.props;
+
+const canonicalURL = `https://krogsgard.github.io/the-upper-room${path}`;
+const navLinks = [
+  { href: '/the-upper-room/', label: 'Home' },
+  { href: '/the-upper-room/bible/', label: 'Bible' },
+  { href: '/the-upper-room/archive/', label: 'Archive' },
+  { href: '/the-upper-room/studies/', label: 'Studies' },
+  { href: '/the-upper-room/about/', label: 'About' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title} — The Upper Room</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:url" content={canonicalURL} />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/the-upper-room/manifest.json" />
+  <meta name="theme-color" content="#3d2b1f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="The Upper Room" />
+  <link rel="apple-touch-icon" href="/the-upper-room/icons/icon-192.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/the-upper-room/icons/favicon.svg" />
+
+  <!-- Pagefind -->
+  <link rel="stylesheet" href="/the-upper-room/pagefind/pagefind-ui.css" />
+
+  <!-- Preconnect fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Navigation -->
+  <header class="sticky top-0 z-50 bg-brown-900 border-b border-parchment-800/30">
+    <div class="container-upper">
+      <nav class="flex items-center justify-between h-16">
+        <!-- Wordmark -->
+        <a href="/the-upper-room/" class="flex items-center gap-3 group">
+          <span class="text-gold-400 text-xl">✦</span>
+          <span class="font-display font-semibold text-parchment-100 text-lg tracking-tight group-hover:text-gold-400 transition-colors">
+            The Upper Room
+          </span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <ul class="hidden md:flex items-center gap-8">
+          {navLinks.map(link => (
+            <li>
+              <a
+                href={link.href}
+                class={`font-display text-sm tracking-wide transition-colors duration-200 ${
+                  currentPath === link.href || (link.href !== '/the-upper-room/' && currentPath.startsWith(link.href))
+                    ? 'text-gold-400 border-b border-gold-400 pb-0.5'
+                    : 'text-parchment-300 hover:text-parchment-100'
+                }`}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <!-- Search toggle -->
+        <button
+          id="search-toggle"
+          class="text-parchment-300 hover:text-parchment-100 transition-colors p-2"
+          aria-label="Search"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </button>
+
+        <!-- Mobile menu toggle -->
+        <button id="mobile-menu-toggle" class="md:hidden text-parchment-300 hover:text-parchment-100 p-2" aria-label="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-brown-950 border-t border-parchment-800/20">
+      <ul class="container-upper py-4 space-y-3">
+        {navLinks.map(link => (
+          <li>
+            <a href={link.href} class="block font-display text-sm text-parchment-300 hover:text-gold-400 py-2 transition-colors">
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </header>
+
+  <!-- Search overlay -->
+  <div id="search-overlay" class="hidden fixed inset-0 z-50 bg-brown-950/80 backdrop-blur-sm">
+    <div class="container-upper pt-24 pb-8">
+      <div class="max-w-2xl mx-auto">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-display text-xl text-parchment-100">Search</h2>
+          <button id="search-close" class="text-parchment-400 hover:text-parchment-100 p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div id="search-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <main class="flex-1">
+    <slot />
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-brown-900 border-t border-parchment-800/20 mt-16">
+    <div class="container-upper py-12">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-gold-400">✦</span>
+            <span class="font-display font-semibold text-parchment-200">The Upper Room</span>
+          </div>
+          <p class="text-parchment-400 text-sm leading-relaxed">
+            A devotional reading companion for the thoughtful Christian.
+            Scripture, theology, and the communion of saints.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-display font-semibold text-parchment-300 text-sm tracking-wide uppercase mb-4">Navigate</h4>
+          <ul class="space-y-2">
+            {navLinks.map(link => (
+              <li>
+                <a href={link.href} class="text-parchment-500 hover:text-parchment-300 text-sm transition-colors">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-display font-semibold text-parchment-300 text-sm tracking-wide uppercase mb-4">Current Season</h4>
+          <div class="flex items-center gap-2 text-sm text-parchment-400">
+            <span class="inline-block w-2 h-2 rounded-full bg-lent"></span>
+            <span>Lent — preparing for Easter, April 5</span>
+          </div>
+          <p class="text-parchment-500 text-xs mt-3">
+            ESV Bible text courtesy of Crossway. Scripture quotations are from the ESV® Bible.
+          </p>
+        </div>
+      </div>
+      <div class="section-rule opacity-20 my-8"></div>
+      <p class="text-parchment-600 text-xs text-center">
+        © {new Date().getFullYear()} The Upper Room. Built with care for the saints.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/the-upper-room/service-worker.js')
+          .then(reg => console.log('SW registered:', reg.scope))
+          .catch(err => console.log('SW registration failed:', err));
+      });
+    }
+  </script>
+
+  <!-- Mobile menu & search toggle -->
+  <script>
+    const mobileToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const searchToggle = document.getElementById('search-toggle');
+    const searchClose = document.getElementById('search-close');
+    const searchOverlay = document.getElementById('search-overlay');
+
+    mobileToggle?.addEventListener('click', () => {
+      mobileMenu?.classList.toggle('hidden');
+    });
+
+    searchToggle?.addEventListener('click', () => {
+      searchOverlay?.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      initPagefind();
+    });
+
+    searchClose?.addEventListener('click', () => {
+      searchOverlay?.classList.add('hidden');
+      document.body.style.overflow = '';
+    });
+
+    let pagefindLoaded = false;
+    async function initPagefind() {
+      if (pagefindLoaded) return;
+      pagefindLoaded = true;
+      try {
+        // @ts-ignore
+        const { PagefindUI } = await import('/the-upper-room/pagefind/pagefind-ui.js');
+        new PagefindUI({ element: '#search-container', showSubResults: true });
+      } catch (e) {
+        const container = document.getElementById('search-container');
+        if (container) container.innerHTML = '<p class="text-parchment-400 text-sm">Search index not yet built. Run pagefind after build.</p>';
+      }
+    }
+  </script>
+</body>
+</html>

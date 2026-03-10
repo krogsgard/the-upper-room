@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "text": "He is no fool who gives what he cannot keep to gain what he cannot lose.",
+    "author": "Jim Elliot",
+    "source": "Journal, 1949",
+    "theme": "sacrifice"
+  },
+  {
+    "id": 2,
+    "text": "God is most glorified in us when we are most satisfied in him.",
+    "author": "John Piper",
+    "source": "Desiring God",
+    "theme": "joy"
+  },
+  {
+    "id": 3,
+    "text": "Thou hast made us for thyself, O Lord, and our heart is restless until it finds its rest in thee.",
+    "author": "Augustine of Hippo",
+    "source": "Confessions, Book I",
+    "theme": "longing"
+  },
+  {
+    "id": 4,
+    "text": "Prayer is not overcoming God's reluctance; it is laying hold of His highest willingness.",
+    "author": "Richard Trench",
+    "source": "Notes on the Parables",
+    "theme": "prayer"
+  },
+  {
+    "id": 5,
+    "text": "Jesus Christ is not a cosmic errand boy. I mean no irreverence. It is simply that so many people have so contracted and so narrowed the function of Jesus Christ that He has become not the Lord of glory but a kind of celestial Santa Claus.",
+    "author": "A.W. Tozer",
+    "source": "That Incredible Christian",
+    "theme": "lordship"
+  },
+  {
+    "id": 6,
+    "text": "The cross is the centre of the world's history; the incarnation of Christ and the crucifixion of our Lord are the pivot round which all the events of the ages revolve.",
+    "author": "Alexander Maclaren",
+    "source": "Sermons",
+    "theme": "cross"
+  },
+  {
+    "id": 7,
+    "text": "We are not necessarily doubting that God will do the best for us; we are wondering how painful the best will turn out to be.",
+    "author": "C.S. Lewis",
+    "source": "Letters of C.S. Lewis",
+    "theme": "suffering"
+  },
+  {
+    "id": 8,
+    "text": "Faith is deliberate confidence in the character of God whose ways you may not understand at the time.",
+    "author": "Oswald Chambers",
+    "source": "My Utmost for His Highest",
+    "theme": "faith"
+  },
+  {
+    "id": 9,
+    "text": "Preach the gospel to yourself every day.",
+    "author": "Jerry Bridges",
+    "source": "The Discipline of Grace",
+    "theme": "grace"
+  },
+  {
+    "id": 10,
+    "text": "God does not love us because we are valuable. We are valuable because God loves us.",
+    "author": "Martin Luther",
+    "source": "Heidelberg Disputation",
+    "theme": "grace"
+  },
+  {
+    "id": 11,
+    "text": "The gospel is not a doctrine of the tongue, but of life. It cannot be grasped by reason and memory only, but it is fully understood when it possesses the whole soul and penetrates to the inner recesses of the heart.",
+    "author": "John Calvin",
+    "source": "Institutes of the Christian Religion",
+    "theme": "gospel"
+  },
+  {
+    "id": 12,
+    "text": "Christ is no Moses, no exactor, no giver of laws, but a giver of grace, a Savior; He is infinite mercy and goodness, freely and bountifully given to us.",
+    "author": "Martin Luther",
+    "source": "Commentary on Galatians",
+    "theme": "grace"
+  },
+  {
+    "id": 13,
+    "text": "The whole of life is a school of desire.",
+    "author": "Augustine of Hippo",
+    "source": "Sermons",
+    "theme": "longing"
+  },
+  {
+    "id": 14,
+    "text": "Jesus does not give recipes that show the way to God as other teachers of religion do. He is himself the way.",
+    "author": "Karl Barth",
+    "source": "Dogmatics in Outline",
+    "theme": "christology"
+  },
+  {
+    "id": 15,
+    "text": "The Christian does not think God will love us because we are good, but that God will make us good because He loves us.",
+    "author": "C.S. Lewis",
+    "source": "Mere Christianity",
+    "theme": "grace"
+  },
+  {
+    "id": 16,
+    "text": "Joy is the serious business of heaven.",
+    "author": "C.S. Lewis",
+    "source": "Letters to Malcolm",
+    "theme": "joy"
+  },
+  {
+    "id": 17,
+    "text": "Justification means this: that the ungodly is declared righteous by God on account of Christ.",
+    "author": "Charles Spurgeon",
+    "source": "The Treasury of David",
+    "theme": "justification"
+  },
+  {
+    "id": 18,
+    "text": "God never uses anyone greatly until He tests them deeply.",
+    "author": "A.W. Tozer",
+    "source": "The Pursuit of God",
+    "theme": "suffering"
+  },
+  {
+    "id": 19,
+    "text": "To fall in love with God is the greatest romance; to seek him the greatest adventure; to find him, the greatest human achievement.",
+    "author": "Augustine of Hippo",
+    "source": "Confessions",
+    "theme": "love"
+  },
+  {
+    "id": 20,
+    "text": "Let your desires be without measure, let your longings be ungoverned, and let all your petitions be unrestrained — for God is able to give you far more than you can desire.",
+    "author": "Charles Spurgeon",
+    "source": "Morning by Morning",
+    "theme": "prayer"
+  },
+  {
+    "id": 21,
+    "text": "We are always in the forge or on the anvil; by trials God is shaping us for higher things.",
+    "author": "Henry Ward Beecher",
+    "source": "Life Thoughts",
+    "theme": "suffering"
+  },
+  {
+    "id": 22,
+    "text": "The man who kneels to God can stand up to anything.",
+    "author": "Louis H. Evans",
+    "source": "",
+    "theme": "prayer"
+  },
+  {
+    "id": 23,
+    "text": "God loves each of us as if there were only one of us.",
+    "author": "Augustine of Hippo",
+    "source": "Confessions",
+    "theme": "love"
+  },
+  {
+    "id": 24,
+    "text": "The Gospel is not advice on how to live or tips for being better. It is news about what Christ has done.",
+    "author": "Timothy Keller",
+    "source": "The Prodigal God",
+    "theme": "gospel"
+  },
+  {
+    "id": 25,
+    "text": "God will either give us what we ask or give us what we would have asked if we knew everything He knows.",
+    "author": "Timothy Keller",
+    "source": "Prayer: Experiencing Awe and Intimacy with God",
+    "theme": "prayer"
+  },
+  {
+    "id": 26,
+    "text": "Sanctification is not about trying harder but about trusting more completely.",
+    "author": "Dane Ortlund",
+    "source": "Gentle and Lowly",
+    "theme": "sanctification"
+  },
+  {
+    "id": 27,
+    "text": "Jesus is not a product to be marketed but a Savior to be proclaimed.",
+    "author": "John Piper",
+    "source": "Let the Nations Be Glad",
+    "theme": "mission"
+  },
+  {
+    "id": 28,
+    "text": "His heart is the most tender and gentle of all hearts. It is toward you.",
+    "author": "Dane Ortlund",
+    "source": "Gentle and Lowly",
+    "theme": "grace"
+  },
+  {
+    "id": 29,
+    "text": "Nothing in all creation is so like God as stillness.",
+    "author": "Meister Eckhart",
+    "source": "Sermons",
+    "theme": "contemplation"
+  },
+  {
+    "id": 30,
+    "text": "Our goal is not to be relevant to the culture but to be faithful to the King.",
+    "author": "John Owen",
+    "source": "The Mortification of Sin",
+    "theme": "faithfulness"
+  }
+]

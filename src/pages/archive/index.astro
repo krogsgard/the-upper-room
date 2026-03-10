@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArchiveGrid from '../../components/ArchiveGrid.astro';
+
+const featured = [
+  {
+    title: "Confessions",
+    author: "Augustine of Hippo",
+    year: "397 AD",
+    excerpt: "Thou hast made us for thyself, O Lord, and our heart is restless until it finds its rest in thee.",
+    theme: "Longing",
+    slug: "augustine-confessions",
+  },
+  {
+    title: "The Mortification of Sin",
+    author: "John Owen",
+    year: "1656",
+    excerpt: "Do you mortify; do you make it your daily work; be always at it whilst you live; cease not a day from this work; be killing sin or it will be killing you.",
+    theme: "Sanctification",
+    slug: "owen-mortification",
+  },
+  {
+    title: "The Pursuit of God",
+    author: "A.W. Tozer",
+    year: "1948",
+    excerpt: "Before the world was created, God anticipated our condition and provided for our need.",
+    theme: "Devotion",
+    slug: "tozer-pursuit",
+  },
+];
+---
+
+<BaseLayout title="Archive" description="Classic devotional literature organized by theme." path="/archive/">
+  <div class="container-upper py-12" data-pagefind-body>
+
+    <div class="mb-10">
+      <span class="text-label text-gold-600 block mb-2">Devotional Literature</span>
+      <h1 class="font-display text-display-md font-bold text-brown-900 mb-3">The Archive</h1>
+      <p class="text-brown-600 max-w-prose">
+        Two thousand years of Christian reflection — the saints speaking across centuries.
+        Organized by theme for devotional reading.
+      </p>
+    </div>
+
+    <!-- Featured works -->
+    <section class="mb-12">
+      <h2 class="font-display text-xl font-semibold text-brown-900 mb-6 flex items-center gap-2">
+        <span class="text-gold-500 text-sm">✦</span> Featured Works
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {featured.map(work => (
+          <a href={`/the-upper-room/archive/${work.slug}/`} class="group card-parchment hover:bg-parchment-200 transition-all duration-200">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-label text-gold-600">{work.theme}</span>
+              <span class="text-parchment-400 text-xs">{work.year}</span>
+            </div>
+            <h3 class="font-display text-xl font-bold text-brown-900 mb-1 group-hover:text-brown-700">{work.title}</h3>
+            <p class="text-parchment-600 text-sm mb-3">by {work.author}</p>
+            <blockquote class="border-l-2 border-gold-400 pl-3 text-brown-700 text-sm italic leading-relaxed">
+              "{work.excerpt}"
+            </blockquote>
+            <div class="mt-4 text-gold-500 text-sm group-hover:translate-x-1 transition-transform">Read more →</div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <div class="section-rule"></div>
+
+    <!-- By theme -->
+    <section>
+      <h2 class="font-display text-xl font-semibold text-brown-900 mb-6 flex items-center gap-2">
+        <span class="text-gold-500 text-sm">✦</span> Browse by Theme
+      </h2>
+      <ArchiveGrid />
+    </section>
+  </div>
+</BaseLayout>

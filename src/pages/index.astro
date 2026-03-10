@@ -1,0 +1,161 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DailyQuote from '../components/DailyQuote.astro';
+import SeasonalBanner from '../components/SeasonalBanner.astro';
+import ArchiveGrid from '../components/ArchiveGrid.astro';
+import BibleCTA from '../components/BibleCTA.astro';
+import quotes from '../data/quotes.json';
+
+// Recent quotes for the mini-grid (last 3)
+const now = new Date();
+const start = new Date(now.getFullYear(), 0, 0);
+const dayOfYear = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+const recentQuotes = [
+  quotes[(dayOfYear - 1 + quotes.length) % quotes.length],
+  quotes[(dayOfYear - 2 + quotes.length) % quotes.length],
+  quotes[(dayOfYear - 3 + quotes.length) % quotes.length],
+];
+
+const devotionalStubs = [
+  { title: 'The Hiddenness of God in Suffering', theme: 'Suffering', date: 'March 9, 2026', slug: 'hiddenness-of-god' },
+  { title: 'What Calvin Taught Us About Justification', theme: 'Justification', date: 'March 8, 2026', slug: 'calvin-justification' },
+  { title: 'Learning to Pray with the Psalms', theme: 'Prayer', date: 'March 7, 2026', slug: 'praying-psalms' },
+  { title: 'The Strange Logic of Grace', theme: 'Grace', date: 'March 6, 2026', slug: 'logic-of-grace' },
+];
+---
+
+<BaseLayout title="Home" path="/">
+  <!-- Daily Quote Hero -->
+  <DailyQuote />
+
+  <!-- Main content -->
+  <div class="container-upper py-12">
+
+    <!-- Seasonal Banner -->
+    <div class="mb-12" data-pagefind-ignore>
+      <SeasonalBanner />
+    </div>
+
+    <!-- Two-column layout: Studies + Bible Reader -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+      <!-- Recent Studies -->
+      <div class="lg:col-span-2">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-display text-2xl font-bold text-brown-900">Recent Studies</h2>
+          <a href="/the-upper-room/studies/" class="text-gold-600 hover:text-gold-500 text-sm font-display transition-colors">
+            All studies →
+          </a>
+        </div>
+        <div class="space-y-4">
+          {devotionalStubs.map(study => (
+            <a
+              href={`/the-upper-room/studies/${study.slug}/`}
+              class="group flex items-start gap-4 p-4 card-parchment hover:bg-parchment-200 transition-all duration-200"
+            >
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-1">
+                  <span class="text-label text-gold-600">{study.theme}</span>
+                  <span class="text-parchment-400 text-xs">·</span>
+                  <span class="text-parchment-500 text-xs">{study.date}</span>
+                </div>
+                <h3 class="font-display text-lg font-semibold text-brown-900 group-hover:text-brown-700 leading-snug">
+                  {study.title}
+                </h3>
+              </div>
+              <span class="text-gold-500 mt-1 group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Bible CTA -->
+      <div class="lg:col-span-1">
+        <div class="mb-6">
+          <h2 class="font-display text-2xl font-bold text-brown-900">Scripture</h2>
+        </div>
+        <BibleCTA />
+      </div>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- Archive grid -->
+    <section class="mb-16" id="archive">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="font-display text-2xl font-bold text-brown-900 mb-1">The Archive</h2>
+          <p class="text-brown-600 text-sm">Classic devotional literature, organized by theme.</p>
+        </div>
+        <a href="/the-upper-room/archive/" class="text-gold-600 hover:text-gold-500 text-sm font-display transition-colors">
+          Browse all →
+        </a>
+      </div>
+      <ArchiveGrid />
+    </section>
+
+    <div class="section-rule"></div>
+
+    <!-- Previous quotes -->
+    <section class="mb-16">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="font-display text-2xl font-bold text-brown-900">Recent Quotes</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {recentQuotes.map(q => (
+          <div class="card-parchment">
+            <div class="text-gold-500 text-3xl font-display leading-none mb-2 opacity-50">"</div>
+            <p class="text-brown-800 italic leading-relaxed mb-4 text-sm">{q.text.length > 180 ? q.text.slice(0, 180) + '…' : q.text}</p>
+            <div>
+              <p class="font-display font-semibold text-brown-900 text-sm">{q.author}</p>
+              {q.source && <p class="text-parchment-600 text-xs mt-0.5">{q.source}</p>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Newsletter / PWA install prompt -->
+    <section class="bg-brown-900 rounded-sm p-8 md:p-12 text-center relative overflow-hidden mb-16">
+      <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent"></div>
+      <span class="text-gold-400 text-2xl mb-4 block">✦</span>
+      <h2 class="font-display text-2xl md:text-3xl font-bold text-parchment-100 mb-3">
+        Read with Intention
+      </h2>
+      <p class="text-parchment-400 text-sm leading-relaxed max-w-lg mx-auto mb-8">
+        Install The Upper Room as an app for quiet morning reading — no notifications, no distractions.
+        A digital chapel in your pocket.
+      </p>
+      <button
+        id="install-btn"
+        class="btn-gold hidden"
+      >
+        Install App
+      </button>
+      <p id="pwa-note" class="text-parchment-500 text-xs">
+        Works offline once installed. iOS: tap Share → Add to Home Screen.
+      </p>
+    </section>
+
+  </div>
+</BaseLayout>
+
+<script>
+  // PWA install prompt
+  let deferredPrompt: any;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const btn = document.getElementById('install-btn');
+    const note = document.getElementById('pwa-note');
+    btn?.classList.remove('hidden');
+    note?.classList.add('hidden');
+
+    btn?.addEventListener('click', async () => {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log('PWA install:', outcome);
+      deferredPrompt = null;
+      btn.classList.add('hidden');
+    });
+  });
+</script>

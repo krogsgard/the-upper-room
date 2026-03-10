@@ -1,0 +1,39 @@
+---
+interface Props {
+  passageHtml: string;
+  bookName: string;
+  chapter: number;
+  wordCount?: number;
+}
+
+const { passageHtml, bookName, chapter, wordCount = 0 } = Astro.props;
+
+// Estimate reading time (avg 200 wpm for devotional reading)
+const readingMinutes = Math.max(1, Math.ceil(wordCount / 200));
+---
+
+<article class="bible-reader" style="padding: 2rem 1rem 4rem;">
+  <header style="max-width: 70ch; margin: 0 auto 2rem; text-align: center; padding-bottom: 1.5rem; border-bottom: 1px solid #ede5d5;">
+    <h1 style="font-family: 'Playfair Display', Georgia, serif; font-size: 2rem; font-weight: 700; color: #2c1810; margin: 0 0 0.25rem;">
+      {bookName}
+    </h1>
+    <p style="font-family: 'Playfair Display', Georgia, serif; font-size: 1.1rem; color: #8b6353; margin: 0; font-style: italic;">
+      Chapter {chapter}
+    </p>
+    {wordCount > 0 && (
+      <p style="font-size: 0.8rem; color: #b8860b; margin-top: 0.5rem; font-family: 'EB Garamond', serif;">
+        ~{readingMinutes} min read
+      </p>
+    )}
+  </header>
+
+  <div class="bible-passage" set:html={passageHtml} />
+
+  <footer style="max-width: 70ch; margin: 3rem auto 0; text-align: center; padding-top: 1.5rem; border-top: 1px solid #ede5d5;">
+    <p style="font-size: 0.75rem; color: #8b6353; font-style: italic; line-height: 1.5;">
+      Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®),
+      copyright © 2001 by Crossway, a publishing ministry of Good News Publishers.
+      Used by permission. All rights reserved.
+    </p>
+  </footer>
+</article>

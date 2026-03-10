@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const studies = [
+  {
+    slug: 'hiddenness-of-god',
+    title: 'The Hiddenness of God in Suffering',
+    theme: 'Suffering',
+    date: 'March 9, 2026',
+    description: 'Why does God sometimes seem absent in our darkest moments? A theological meditation on Deus absconditus — the hidden God.',
+    outline: [
+      'The Complaint of the Psalmists (Ps. 44, 88)',
+      'Luther and the Theology of the Cross',
+      'What Hiddenness Is Not',
+      'The Promise Within the Silence',
+      'Practical Postures in the Dark Night',
+    ],
+    passages: ['Psalm 44:23-24', 'Isaiah 45:15', 'Job 23:8-10'],
+  },
+  {
+    slug: 'calvin-justification',
+    title: 'What Calvin Taught Us About Justification',
+    theme: 'Justification',
+    date: 'March 8, 2026',
+    description: 'Calvin\'s treatment of justification in Institutes Book III remains among the clearest and most pastoral expositions ever written.',
+    outline: [
+      'Definition: What Justification Is and Is Not',
+      'The Double Grace (Duplex Gratia)',
+      'Faith as the Instrument of Justification',
+      'Imputed Righteousness — Christ\'s, Not Ours',
+      'How Works Relate to Justification',
+    ],
+    passages: ['Romans 3:21-26', 'Galatians 2:15-16', 'Philippians 3:8-9'],
+  },
+  {
+    slug: 'praying-psalms',
+    title: 'Learning to Pray with the Psalms',
+    theme: 'Prayer',
+    date: 'March 7, 2026',
+    description: 'Dietrich Bonhoeffer called the Psalter "the prayer book of Jesus." What happens when we let the Psalms teach us how to address God?',
+    outline: [
+      'Why the Psalms Are Our Language School for Prayer',
+      'The Psalms of Orientation (Praise & Trust)',
+      'The Psalms of Disorientation (Lament)',
+      'The Psalms of Reorientation (Thanksgiving)',
+      'Praying Imprecatory Psalms as a Christian',
+    ],
+    passages: ['Psalm 22', 'Psalm 103', 'Psalm 130'],
+  },
+  {
+    slug: 'logic-of-grace',
+    title: 'The Strange Logic of Grace',
+    theme: 'Grace',
+    date: 'March 6, 2026',
+    description: 'Grace defies all economic logic. It cannot be earned, repaid, or deserved. Exploring why the gospel is so hard to believe and so easy to forget.',
+    outline: [
+      'The Parable of the Prodigal — Reading It Correctly',
+      'Why We Revert to Merit Thinking',
+      'Grace Is Not Permissiveness',
+      'The Elder Brother\'s Error',
+      'Living Under Grace Without Abusing It',
+    ],
+    passages: ['Luke 15:11-32', 'Romans 6:1-4', 'Ephesians 2:8-10'],
+  },
+  {
+    slug: 'owen-mortification',
+    title: 'Owen\'s Mortification — A Study Guide',
+    theme: 'Sanctification',
+    date: 'March 5, 2026',
+    description: 'Walking through John Owen\'s "The Mortification of Sin" (1656) — still the most rigorous treatment of how Christians fight indwelling sin.',
+    outline: [
+      'The Main Argument: Sin Must Be Actively Killed',
+      'Who Can Mortify Sin (Only Believers by the Spirit)',
+      'What Mortification Is Not (Common Mistakes)',
+      'The Eight Duties of Mortification',
+      'Applying Owen Today: Digital Age Temptations',
+    ],
+    passages: ['Romans 8:13', 'Colossians 3:5', 'Galatians 5:16-24'],
+  },
+];
+---
+
+<BaseLayout title="Studies" description="Topical theological studies and devotional outlines." path="/studies/">
+  <div class="container-upper py-12" data-pagefind-body>
+
+    <div class="mb-10">
+      <span class="text-label text-gold-600 block mb-2">Theological Studies</span>
+      <h1 class="font-display text-display-md font-bold text-brown-900 mb-3">Studies</h1>
+      <p class="text-brown-600 max-w-prose">
+        Topical outlines for deeper engagement with Scripture and the Christian tradition.
+        Each study includes key passages, theological themes, and reflection questions.
+      </p>
+    </div>
+
+    <div class="space-y-6">
+      {studies.map(study => (
+        <a href={`/the-upper-room/studies/${study.slug}/`} class="group block card-parchment hover:bg-parchment-200 transition-all duration-200">
+          <div class="flex flex-col md:flex-row md:items-start gap-6">
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-label text-gold-600">{study.theme}</span>
+                <span class="text-parchment-400 text-xs">·</span>
+                <span class="text-parchment-500 text-xs">{study.date}</span>
+              </div>
+              <h2 class="font-display text-xl font-bold text-brown-900 mb-2 group-hover:text-brown-700">
+                {study.title}
+              </h2>
+              <p class="text-brown-700 text-sm leading-relaxed mb-4">{study.description}</p>
+              <div class="flex flex-wrap gap-2">
+                {study.passages.map(p => (
+                  <span class="inline-block bg-parchment-200 text-brown-700 text-xs px-2 py-0.5 rounded-sm font-serif">
+                    {p}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div class="md:w-48 flex-shrink-0">
+              <p class="text-label text-parchment-500 mb-2">Outline</p>
+              <ol class="space-y-1">
+                {study.outline.slice(0, 3).map((item, i) => (
+                  <li class="text-brown-600 text-xs leading-relaxed flex gap-1.5">
+                    <span class="text-gold-500 font-display font-semibold">{i + 1}.</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+                {study.outline.length > 3 && (
+                  <li class="text-parchment-500 text-xs">+{study.outline.length - 3} more…</li>
+                )}
+              </ol>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

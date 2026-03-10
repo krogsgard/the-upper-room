@@ -1,0 +1,82 @@
+---
+const categories = [
+  {
+    slug: 'grace',
+    label: 'Grace',
+    icon: '✦',
+    description: 'The unmerited favor of God, freely given to sinners through Christ.',
+    count: 24,
+    color: '#b8860b',
+    featured: 'Luther on Grace Alone',
+  },
+  {
+    slug: 'justification',
+    label: 'Justification',
+    icon: '⚖',
+    description: 'Declared righteous before God on account of Christ\'s perfect obedience.',
+    count: 18,
+    color: '#8a5225',
+    featured: 'Calvin\'s Institutes, Book III',
+  },
+  {
+    slug: 'prayer',
+    label: 'Prayer',
+    icon: '✉',
+    description: 'Conversing with the living God — the breath of the Christian soul.',
+    count: 31,
+    color: '#6b2d3e',
+    featured: 'Spurgeon on Prevailing Prayer',
+  },
+  {
+    slug: 'suffering',
+    label: 'Suffering',
+    icon: '✝',
+    description: 'Finding Christ in the furnace, and emerging refined by fire.',
+    count: 15,
+    color: '#5a311a',
+    featured: 'C.S. Lewis: The Problem of Pain',
+  },
+  {
+    slug: 'sanctification',
+    label: 'Sanctification',
+    icon: '◈',
+    description: 'The lifelong work of the Spirit conforming us to the image of Christ.',
+    count: 20,
+    color: '#2d6a4f',
+    featured: 'Owen on Mortification of Sin',
+  },
+  {
+    slug: 'classical',
+    label: 'Classical Texts',
+    icon: '📜',
+    description: 'The great devotional works of the church across twenty centuries.',
+    count: 42,
+    color: '#3d2b1f',
+    featured: 'Augustine\'s Confessions',
+  },
+];
+---
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {categories.map(cat => (
+    <a
+      href={`/the-upper-room/archive/${cat.slug}/`}
+      class="group card-parchment hover:bg-parchment-200 transition-all duration-200 hover:shadow-md flex flex-col"
+    >
+      <div class="flex items-start justify-between mb-3">
+        <span class="text-2xl" style={`color: ${cat.color}`}>{cat.icon}</span>
+        <span class="text-label text-parchment-500">{cat.count} texts</span>
+      </div>
+      <h3 class="font-display text-xl font-semibold text-brown-900 mb-2 group-hover:text-brown-800">
+        {cat.label}
+      </h3>
+      <p class="text-brown-700 text-sm leading-relaxed flex-1 mb-4">
+        {cat.description}
+      </p>
+      <div class="flex items-center justify-between pt-3 border-t border-parchment-300">
+        <span class="text-parchment-600 text-xs italic">{cat.featured}</span>
+        <span class="text-gold-500 text-sm group-hover:translate-x-1 transition-transform">→</span>
+      </div>
+    </a>
+  ))}
+</div>

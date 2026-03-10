@@ -1,0 +1,50 @@
+---
+// Lent 2026: Feb 18 – April 4; Easter: April 5
+const now = new Date();
+const year = now.getFullYear();
+
+// Compute liturgical season
+const lentStart = new Date(year, 1, 18); // Feb 18
+const easterDate = new Date(year, 3, 5); // April 5
+const pentecost = new Date(year, 4, 24); // ~50 days after Easter
+
+let season = {
+  name: 'Ordinary Time',
+  color: '#2d6a2d',
+  colorName: 'green',
+  description: 'Walking faithfully through the ordinary rhythms of the Christian life.',
+  verse: '"And let us not grow weary of doing good, for in due season we will reap, if we do not give up." — Galatians 6:9',
+  icon: '🌿',
+};
+
+if (now >= lentStart && now < easterDate) {
+  season = {
+    name: 'Lent',
+    color: '#6b2d3e',
+    colorName: 'purple',
+    description: `${Math.ceil((easterDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))} days until Easter (April 5). A season of repentance, fasting, and preparation.`,
+    verse: '"Create in me a clean heart, O God, and renew a right spirit within me." — Psalm 51:10',
+    icon: '✝',
+  };
+} else if (now >= easterDate && now < new Date(year, 3, 12)) {
+  season = {
+    name: 'Easter',
+    color: '#d4a017',
+    colorName: 'gold',
+    description: 'He is risen! Celebrating the resurrection of our Lord Jesus Christ.',
+    verse: '"He is not here, for he has risen, as he said. Come, see the place where he lay." — Matthew 28:6',
+    icon: '✦',
+  };
+}
+---
+
+<div class="border-l-4 py-4 px-6 bg-parchment-100 flex items-start gap-4" style={`border-color: ${season.color}`}>
+  <span class="text-2xl mt-0.5" style={`color: ${season.color}`}>{season.icon}</span>
+  <div>
+    <div class="flex items-center gap-2 mb-1">
+      <span class="text-label" style={`color: ${season.color}`}>{season.name}</span>
+    </div>
+    <p class="text-brown-800 text-sm leading-relaxed">{season.description}</p>
+    <p class="text-brown-600 text-sm italic mt-2">{season.verse}</p>
+  </div>
+</div>
