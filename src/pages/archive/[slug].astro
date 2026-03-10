@@ -1,0 +1,182 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { all } from '../../data/archive-data.js';
+
+export async function getStaticPaths() {
+  const { all } = await import('../../data/archive-data.js');
+  return all.map(item => ({ params: { slug: item.slug }, props: item }));
+}
+
+const item = Astro.props;
+---
+
+{item.type === 'work' ? (
+<BaseLayout
+  title={`${item.title} — ${item.author}`}
+  description={item.description}
+  path={`/archive/${item.slug}/`}
+>
+  <article class="container-upper py-12" data-pagefind-body>
+
+    <!-- Header -->
+    <header class="mb-10 max-w-2xl">
+      <div class="flex items-center gap-3 mb-4 flex-wrap">
+        <a href="/the-upper-room/archive/" class="text-gold-600 hover:text-gold-500 text-sm font-display transition-colors">
+          ← Archive
+        </a>
+        <span class="text-parchment-400">·</span>
+        <span class="text-label text-gold-600">{item.theme}</span>
+        <span class="text-parchment-400">·</span>
+        <span class="text-parchment-500 text-xs">{item.year}</span>
+      </div>
+      <h1 class="font-display text-display-md font-bold text-brown-900 mb-2 leading-tight">
+        {item.title}
+      </h1>
+      <p class="font-display text-lg text-parchment-600 mb-6">by {item.author}</p>
+
+      <!-- Key quote -->
+      <blockquote class="border-l-4 border-gold-400 pl-5 py-1 my-6 not-italic">
+        <p class="text-brown-800 italic text-lg leading-relaxed font-serif">"{item.keyQuote}"</p>
+        <footer class="mt-2 text-parchment-600 text-sm not-italic">— {item.author}, {item.title}</footer>
+      </blockquote>
+
+      <p class="text-brown-600 leading-relaxed">{item.description}</p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+      <!-- Main sections -->
+      <div class="lg:col-span-2">
+        <div class="space-y-8">
+          {item.sections.map(section => (
+            <section>
+              <h2 class="font-display text-xl font-bold text-brown-900 mb-3">{section.title}</h2>
+              <p class="text-brown-800 leading-relaxed text-[1.05rem]">{section.body}</p>
+            </section>
+          ))}
+        </div>
+
+        <!-- Why Read -->
+        <section class="mt-10 pt-8 border-t border-parchment-300">
+          <h2 class="font-display text-xl font-bold text-brown-900 mb-4">Why Read This</h2>
+          <p class="text-brown-700 leading-relaxed">{item.whyRead}</p>
+        </section>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="space-y-6">
+        <!-- Key Passages -->
+        <div class="card-parchment">
+          <h3 class="font-display font-semibold text-brown-900 mb-4 text-sm tracking-wide uppercase">Key Passages</h3>
+          <ul class="space-y-2">
+            {item.passages.map(p => (
+              <li>
+                <a
+                  href="/the-upper-room/bible/"
+                  class="block bg-parchment-200 hover:bg-parchment-300 text-brown-800 text-sm px-3 py-2 rounded-sm font-serif transition-colors"
+                >
+                  {p} →
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Also In -->
+        <div class="card-parchment">
+          <h3 class="font-display font-semibold text-brown-900 mb-4 text-sm tracking-wide uppercase">Also In</h3>
+          <div class="flex flex-wrap gap-2">
+            {item.inArchive.map(tag => (
+              <span class="inline-block bg-parchment-200 text-brown-700 text-xs px-2 py-1 rounded-sm">{tag}</span>
+            ))}
+          </div>
+        </div>
+
+        <div class="text-center">
+          <a href="/the-upper-room/archive/" class="btn-outline text-sm">← Archive</a>
+        </div>
+      </aside>
+    </div>
+  </article>
+</BaseLayout>
+) : (
+<BaseLayout
+  title={`${item.label} — Archive`}
+  description={item.description}
+  path={`/archive/${item.slug}/`}
+>
+  <div class="container-upper py-12" data-pagefind-body>
+
+    <!-- Header -->
+    <header class="mb-10 max-w-2xl">
+      <div class="flex items-center gap-3 mb-4">
+        <a href="/the-upper-room/archive/" class="text-gold-600 hover:text-gold-500 text-sm font-display transition-colors">
+          ← Archive
+        </a>
+      </div>
+      <h1 class="font-display text-display-md font-bold text-brown-900 mb-4">{item.label}</h1>
+      <p class="text-brown-600 text-lg leading-relaxed">{item.description}</p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+      <!-- Works list -->
+      <div class="lg:col-span-2">
+        <h2 class="font-display text-xl font-bold text-brown-900 mb-6">Texts in This Collection</h2>
+        <div class="space-y-4">
+          {item.works.map(work => (
+            <div class="card-parchment">
+              <div class="flex items-start justify-between mb-2">
+                <div>
+                  <h3 class="font-display text-lg font-bold text-brown-900">{work.title}</h3>
+                  <p class="text-parchment-600 text-sm">by {work.author} · {work.year}</p>
+                </div>
+              </div>
+              <blockquote class="border-l-2 border-gold-400 pl-3 mt-3 not-italic">
+                <p class="text-brown-700 text-sm italic leading-relaxed">"{work.excerpt}"</p>
+              </blockquote>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="space-y-6">
+        <!-- Key Themes -->
+        <div class="card-parchment">
+          <h3 class="font-display font-semibold text-brown-900 mb-4 text-sm tracking-wide uppercase">Key Themes</h3>
+          <ul class="space-y-1.5">
+            {item.keyThemes.map(theme => (
+              <li class="flex gap-2 text-brown-700 text-sm">
+                <span class="text-gold-500">✦</span>
+                <span>{theme}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Key Passages -->
+        <div class="card-parchment">
+          <h3 class="font-display font-semibold text-brown-900 mb-4 text-sm tracking-wide uppercase">Key Passages</h3>
+          <ul class="space-y-2">
+            {item.keyPassages.map(p => (
+              <li>
+                <a
+                  href="/the-upper-room/bible/"
+                  class="block bg-parchment-200 hover:bg-parchment-300 text-brown-800 text-sm px-3 py-2 rounded-sm font-serif transition-colors"
+                >
+                  {p} →
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="text-center">
+          <a href="/the-upper-room/archive/" class="btn-outline text-sm">← All Archive</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+)}
