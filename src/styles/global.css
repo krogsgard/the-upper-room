@@ -105,6 +105,116 @@ woc, .woc {
   color: #8b1a1a;
 }
 
+/* =====================================================
+   BIBLE READER — ESV HTML output styles
+   ===================================================== */
+.bible-reader {
+  font-family: 'EB Garamond', Garamond, Georgia, serif;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #1a0f08;
+}
+
+/* Bible passage container */
+.bible-passage {
+  max-width: 70ch;
+  margin: 0 auto;
+}
+
+/* ESV h2.extra_text — chapter title (shown above passage) */
+.bible-passage h2.extra_text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c1810;
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #ede5d5;
+  display: none; /* We show our own h1 header */
+}
+
+/* ESV h3 — section headings within a chapter */
+.bible-passage h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #3d2b1f;
+  margin: 2rem 0 0.75rem;
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+/* ESV paragraphs */
+.bible-passage p {
+  margin: 0 0 1rem;
+  text-indent: 1.5em;
+}
+
+.bible-passage p.starts-chapter {
+  text-indent: 0;
+}
+
+/* Chapter number (e.g. "3:1 ") at start of chapter */
+.bible-passage b.chapter-num {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.7em;
+  font-weight: 700;
+  color: #b8860b;
+  vertical-align: super;
+  line-height: 0;
+  margin-right: 0.15em;
+  font-style: normal;
+}
+
+/* Verse numbers inline */
+.bible-passage b.verse-num {
+  font-size: 0.65em;
+  font-weight: 600;
+  color: #b8860b;
+  vertical-align: super;
+  line-height: 0;
+  margin-right: 0.1em;
+  font-style: normal;
+  font-family: 'Playfair Display', Georgia, serif;
+  letter-spacing: 0;
+}
+
+/* Words of Christ — inline spans */
+.bible-passage span.woc {
+  color: #8b1a1a;
+}
+
+/* Verse nums that are also WOC */
+.bible-passage b.verse-num.woc {
+  color: #8b1a1a;
+}
+
+/* Indent poetry / block quote style from ESV */
+.bible-passage .q {
+  display: block;
+  padding-left: 1.5rem;
+  text-indent: -1rem;
+  margin: 0;
+}
+
+.bible-passage .q2 {
+  display: block;
+  padding-left: 2.5rem;
+  text-indent: -1rem;
+  margin: 0;
+}
+
+.bible-passage .m {
+  text-indent: 0;
+  margin: 0;
+}
+
+/* First paragraph letter styling for opening chapters */
+.bible-passage p.starts-chapter > b.chapter-num + *::first-letter,
+.bible-passage p.starts-chapter::first-letter {
+  /* no dropcap here — subtle enough with verse num */
+}
+
 /* Nav link */
 .nav-link {
   @apply text-parchment-700 hover:text-brown-900 font-display text-sm tracking-wide transition-colors duration-200;

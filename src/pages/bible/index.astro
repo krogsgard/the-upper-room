@@ -1,327 +1,83 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import bibleStructure from '../../data/bible-structure.json';
 
-// Static fallback: Psalm 23 ESV
-const psalm23 = {
-  book: 'Psalms',
-  chapter: 23,
-  verses: [
-    { number: 1, text: 'The LORD is my shepherd; I shall not want.' },
-    { number: 2, text: 'He makes me lie down in green pastures. He leads me beside still waters.' },
-    { number: 3, text: 'He restores my soul. He leads me in paths of righteousness for his name\'s sake.' },
-    { number: 4, text: 'Even though I walk through the valley of the shadow of death, I will fear no evil, for you are with me; your rod and your staff, they comfort me.' },
-    { number: 5, text: 'You prepare a table before me in the presence of my enemies; you anoint my head with oil; my cup overflows.' },
-    { number: 6, text: 'Surely goodness and mercy shall follow me all the days of my life, and I shall dwell in the house of the LORD forever.' },
-  ],
-  heading: 'The LORD Is My Shepherd. A Psalm of David.',
-};
-
-const books = [
-  { name: 'Genesis', chapters: 50, testament: 'OT' },
-  { name: 'Exodus', chapters: 40, testament: 'OT' },
-  { name: 'Psalms', chapters: 150, testament: 'OT' },
-  { name: 'Proverbs', chapters: 31, testament: 'OT' },
-  { name: 'Isaiah', chapters: 66, testament: 'OT' },
-  { name: 'Matthew', chapters: 28, testament: 'NT' },
-  { name: 'Mark', chapters: 16, testament: 'NT' },
-  { name: 'Luke', chapters: 24, testament: 'NT' },
-  { name: 'John', chapters: 21, testament: 'NT' },
-  { name: 'Romans', chapters: 16, testament: 'NT' },
-  { name: '1 Corinthians', chapters: 16, testament: 'NT' },
-  { name: 'Galatians', chapters: 6, testament: 'NT' },
-  { name: 'Ephesians', chapters: 6, testament: 'NT' },
-  { name: 'Philippians', chapters: 4, testament: 'NT' },
-  { name: 'Hebrews', chapters: 13, testament: 'NT' },
-  { name: 'James', chapters: 5, testament: 'NT' },
-  { name: 'Revelation', chapters: 22, testament: 'NT' },
+const featured = [
+  { book: 'psalms', chapter: 23, label: 'Psalm 23', desc: 'The LORD is my shepherd; I shall not want.' },
+  { book: 'john', chapter: 3, label: 'John 3', desc: 'For God so loved the world…' },
+  { book: 'romans', chapter: 8, label: 'Romans 8', desc: 'More than conquerors through him who loved us.' },
+  { book: 'isaiah', chapter: 53, label: 'Isaiah 53', desc: 'He was pierced for our transgressions.' },
 ];
 ---
 
-<BaseLayout title="Bible Reader" description="Read the ESV Bible with The Upper Room's clean, focused interface." path="/bible/">
+<BaseLayout title="Bible Reader" description="Read all 66 books of the Holy Bible (ESV) with The Upper Room's clean, focused devotional reader." path="/bible/">
   <div class="container-upper py-12">
 
-    <div class="mb-8">
-      <span class="text-label text-gold-600 block mb-2">ESV® Bible</span>
-      <h1 class="font-display text-display-md font-bold text-brown-900 mb-2">Bible Reader</h1>
-      <p class="text-brown-600">Read the English Standard Version with focus and reverence.</p>
+    <!-- Header -->
+    <div class="mb-10 text-center">
+      <span class="text-label text-gold-500 block mb-3">English Standard Version</span>
+      <h1 class="font-display text-display-md font-bold text-brown-900 mb-3">Holy Bible</h1>
+      <p class="text-brown-700 font-serif text-lg max-w-xl mx-auto leading-relaxed">
+        All 66 books — beautifully typeset for devotional reading, with red letters and careful typography.
+      </p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-      <!-- Sidebar: Book selector -->
-      <aside class="lg:col-span-1">
-        <div class="card-parchment">
-          <h2 class="font-display font-semibold text-brown-900 mb-4 text-sm tracking-wide uppercase">Books</h2>
+    <!-- Featured Passages -->
+    <section class="mb-12">
+      <h2 class="text-label text-parchment-600 text-center mb-5">Beloved Passages</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {featured.map(f => (
+          <a href={`/the-upper-room/bible/${f.book}/${f.chapter}`}
+             class="card-parchment hover:border-gold-400 transition-colors block no-underline group">
+            <div class="font-display font-semibold text-brown-900 mb-1 group-hover:text-gold-600 transition-colors">{f.label}</div>
+            <div class="font-serif text-sm text-brown-600 italic leading-snug">{f.desc}</div>
+          </a>
+        ))}
+      </div>
+    </section>
 
-          <div class="mb-3">
-            <span class="text-label text-parchment-500 block mb-2">Old Testament</span>
-            <div class="space-y-1">
-              {books.filter(b => b.testament === 'OT').map(book => (
-                <button
-                  data-book={book.name}
-                  class="book-btn w-full text-left text-sm text-brown-700 hover:text-gold-600 hover:bg-parchment-200 px-2 py-1 rounded-sm transition-colors font-serif"
-                >
-                  {book.name}
-                </button>
-              ))}
-            </div>
-          </div>
+    <!-- Two-column book grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
 
-          <div>
-            <span class="text-label text-parchment-500 block mb-2">New Testament</span>
-            <div class="space-y-1">
-              {books.filter(b => b.testament === 'NT').map(book => (
-                <button
-                  data-book={book.name}
-                  class="book-btn w-full text-left text-sm text-brown-700 hover:text-gold-600 hover:bg-parchment-200 px-2 py-1 rounded-sm transition-colors font-serif"
-                >
-                  {book.name}
-                </button>
-              ))}
-            </div>
-          </div>
+      <!-- Old Testament -->
+      <section>
+        <div class="flex items-center gap-3 mb-5">
+          <h2 class="font-display font-bold text-brown-900 text-xl">Old Testament</h2>
+          <span class="text-label text-parchment-500">39 Books</span>
         </div>
-      </aside>
+        <ul class="space-y-0.5" role="list">
+          {bibleStructure.testament.OT.map(book => (
+            <li>
+              <a href={`/the-upper-room/bible/${book.slug}/1`}
+                 class="flex justify-between items-center py-1.5 px-2 rounded-sm text-brown-800 hover:bg-parchment-200 hover:text-brown-900 transition-colors font-serif text-base group">
+                <span>{book.name}</span>
+                <span class="text-xs text-parchment-500 group-hover:text-gold-500 transition-colors">{book.chapters} ch</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-      <!-- Main reading area -->
-      <main class="lg:col-span-3" data-pagefind-body>
-        <!-- Chapter nav -->
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center gap-3">
-            <span id="current-book-label" class="font-display text-xl font-semibold text-brown-900">Psalm 23</span>
-            <select id="chapter-select" class="text-sm text-brown-700 bg-parchment-100 border border-parchment-300 rounded-sm px-2 py-1 font-serif">
-              {Array.from({ length: 150 }, (_, i) => i + 1).map(n => (
-                <option value={n} selected={n === 23}>Chapter {n}</option>
-              ))}
-            </select>
-          </div>
-          <div class="flex items-center gap-2">
-            <button id="prev-chapter" class="btn-outline text-xs py-1.5 px-3">← Prev</button>
-            <button id="next-chapter" class="btn-outline text-xs py-1.5 px-3">Next →</button>
-          </div>
+      <!-- New Testament -->
+      <section>
+        <div class="flex items-center gap-3 mb-5">
+          <h2 class="font-display font-bold text-brown-900 text-xl">New Testament</h2>
+          <span class="text-label text-parchment-500">27 Books</span>
         </div>
+        <ul class="space-y-0.5" role="list">
+          {bibleStructure.testament.NT.map(book => (
+            <li>
+              <a href={`/the-upper-room/bible/${book.slug}/1`}
+                 class="flex justify-between items-center py-1.5 px-2 rounded-sm text-brown-800 hover:bg-parchment-200 hover:text-brown-900 transition-colors font-serif text-base group">
+                <span>{book.name}</span>
+                <span class="text-xs text-parchment-500 group-hover:text-gold-500 transition-colors">{book.chapters} ch</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-        <!-- Loading state -->
-        <div id="loading-indicator" class="hidden text-center py-12">
-          <div class="inline-block w-8 h-8 border-2 border-gold-500 border-t-transparent rounded-full animate-spin"></div>
-          <p class="text-parchment-500 text-sm mt-3">Loading Scripture…</p>
-        </div>
-
-        <!-- API unavailable notice -->
-        <div id="api-notice" class="mb-6 border border-gold-400/30 bg-gold-400/5 rounded-sm p-4">
-          <p class="text-brown-700 text-sm">
-            <strong class="font-display">Note:</strong> Live ESV API requires a Crossway API key (set <code class="text-xs bg-parchment-200 px-1 rounded">CROSSWAY_API_KEY</code>).
-            Showing static sample below. <a href="https://api.esv.org" class="text-gold-600 hover:underline">Get an API key →</a>
-          </p>
-        </div>
-
-        <!-- Scripture text -->
-        <article id="scripture-content" class="prose-scripture">
-          <div class="mb-6">
-            <h2 class="font-display text-2xl font-bold text-brown-900 mb-1" id="chapter-heading">Psalm 23</h2>
-            <p class="text-brown-600 italic text-sm mb-6" id="chapter-subheading">{psalm23.heading}</p>
-
-            <div class="space-y-4" id="verses-container">
-              {psalm23.verses.map(v => (
-                <p class="font-serif text-lg text-brown-900 leading-relaxed">
-                  <sup class="font-display text-gold-500 font-semibold text-sm mr-1 not-italic">{v.number}</sup>
-                  {v.text}
-                </p>
-              ))}
-            </div>
-          </div>
-
-          <div class="mt-12 pt-6 border-t border-parchment-300">
-            <p class="text-parchment-500 text-xs text-center">
-              Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®),
-              Copyright © 2001 by Crossway, a publishing ministry of Good News Publishers.
-              Used by permission. All rights reserved.
-            </p>
-          </div>
-        </article>
-
-        <!-- Reflection prompt -->
-        <div class="mt-8 card-parchment">
-          <span class="text-label text-gold-600 block mb-2">Reflection</span>
-          <p class="text-brown-700 italic leading-relaxed text-sm">
-            "The LORD is my shepherd" — not was, not could be. Present tense certainty
-            for the child of God. What does it mean to have the LORD himself as your shepherd today?
-          </p>
-        </div>
-      </main>
     </div>
+
   </div>
 </BaseLayout>
-
-<script>
-// Book/chapter navigation with ESV API fetch
-const CROSSWAY_API_KEY = (import.meta as any).env?.PUBLIC_CROSSWAY_API_KEY || '';
-const BASE = '/the-upper-room';
-
-interface EsvResponse {
-  query: string;
-  canonical: string;
-  parsed: number[][];
-  passage_meta: { canonical: string; chapter_start: number[]; chapter_end: number[] }[];
-  passages: string[];
-}
-
-let currentBook = 'Psalms';
-let currentChapter = 23;
-
-const booksData: Record<string, number> = {
-  'Genesis': 50, 'Exodus': 40, 'Psalms': 150, 'Proverbs': 31, 'Isaiah': 66,
-  'Matthew': 28, 'Mark': 16, 'Luke': 24, 'John': 21, 'Romans': 16,
-  '1 Corinthians': 16, 'Galatians': 6, 'Ephesians': 6, 'Philippians': 4,
-  'Hebrews': 13, 'James': 5, 'Revelation': 22,
-};
-
-async function loadChapter(book: string, chapter: number) {
-  const loading = document.getElementById('loading-indicator');
-  const content = document.getElementById('scripture-content');
-  const notice = document.getElementById('api-notice');
-
-  loading?.classList.remove('hidden');
-  if (content) content.style.opacity = '0.4';
-
-  const ref = `${book} ${chapter}`;
-
-  if (CROSSWAY_API_KEY) {
-    try {
-      const params = new URLSearchParams({
-        q: ref,
-        'include-headings': 'true',
-        'include-footnotes': 'false',
-        'include-verse-numbers': 'true',
-        'include-short-copyright': 'false',
-        'include-passage-references': 'false',
-      });
-      const res = await fetch(`https://api.esv.org/v3/passage/text/?${params}`, {
-        headers: { Authorization: `Token ${CROSSWAY_API_KEY}` },
-      });
-      if (res.ok) {
-        const data: EsvResponse = await res.json();
-        if (data.passages && data.passages[0]) {
-          renderEsvText(data.passages[0], ref, data.canonical);
-          notice?.classList.add('hidden');
-          return;
-        }
-      }
-    } catch (e) {
-      console.error('ESV API error:', e);
-    }
-  }
-
-  // Fallback
-  renderFallback(book, chapter);
-}
-
-function renderEsvText(text: string, ref: string, canonical: string) {
-  const heading = document.getElementById('chapter-heading');
-  const subheading = document.getElementById('chapter-subheading');
-  const verses = document.getElementById('verses-container');
-  const loading = document.getElementById('loading-indicator');
-  const content = document.getElementById('scripture-content');
-
-  if (heading) heading.textContent = canonical;
-  if (subheading) subheading.textContent = '';
-  if (verses) {
-    // Parse ESV text format into verse paragraphs
-    const lines = text.split('\n').filter(l => l.trim());
-    verses.innerHTML = lines.map(line => {
-      // ESV text uses [1] for verse numbers
-      const formatted = line
-        .replace(/\[(\d+)\]/g, '<sup class="font-display text-gold-500 font-semibold text-sm mr-1">$1</sup>')
-        .replace(/<woc>(.*?)<\/woc>/g, '<span class="woc">$1</span>');
-      return `<p class="font-serif text-lg text-brown-900 leading-relaxed">${formatted}</p>`;
-    }).join('');
-  }
-  loading?.classList.add('hidden');
-  if (content) content.style.opacity = '1';
-}
-
-function renderFallback(book: string, chapter: number) {
-  const heading = document.getElementById('chapter-heading');
-  const subheading = document.getElementById('chapter-subheading');
-  const verses = document.getElementById('verses-container');
-  const loading = document.getElementById('loading-indicator');
-  const content = document.getElementById('scripture-content');
-
-  if (heading) heading.textContent = `${book} ${chapter}`;
-  if (subheading) subheading.textContent = '';
-  if (verses) {
-    verses.innerHTML = `
-      <div class="py-8 text-center">
-        <p class="text-brown-600 italic mb-2">ESV API key required to load live Scripture.</p>
-        <p class="text-parchment-500 text-sm">Set <code class="bg-parchment-200 px-1 rounded">PUBLIC_CROSSWAY_API_KEY</code> in your environment.</p>
-        <a href="https://api.esv.org" class="btn-outline inline-flex mt-4 text-sm" target="_blank" rel="noopener">
-          Get ESV API Key →
-        </a>
-      </div>
-    `;
-  }
-  loading?.classList.add('hidden');
-  if (content) content.style.opacity = '1';
-}
-
-function updateChapterSelect(book: string, chapter: number) {
-  const select = document.getElementById('chapter-select') as HTMLSelectElement;
-  const label = document.getElementById('current-book-label');
-
-  if (label) label.textContent = `${book} ${chapter}`;
-
-  const maxChapters = booksData[book] || 50;
-  select.innerHTML = Array.from({ length: maxChapters }, (_, i) => i + 1)
-    .map(n => `<option value="${n}" ${n === chapter ? 'selected' : ''}>Chapter ${n}</option>`)
-    .join('');
-}
-
-// Event: book buttons
-document.querySelectorAll('.book-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const book = (btn as HTMLElement).dataset.book || 'Psalms';
-    currentBook = book;
-    currentChapter = 1;
-    updateChapterSelect(book, 1);
-    loadChapter(book, 1);
-
-    // Active state
-    document.querySelectorAll('.book-btn').forEach(b => b.classList.remove('text-gold-600', 'font-semibold'));
-    btn.classList.add('text-gold-600', 'font-semibold');
-  });
-});
-
-// Event: chapter select
-document.getElementById('chapter-select')?.addEventListener('change', (e) => {
-  currentChapter = parseInt((e.target as HTMLSelectElement).value, 10);
-  loadChapter(currentBook, currentChapter);
-});
-
-// Event: prev/next
-document.getElementById('prev-chapter')?.addEventListener('click', () => {
-  if (currentChapter > 1) {
-    currentChapter--;
-    updateChapterSelect(currentBook, currentChapter);
-    loadChapter(currentBook, currentChapter);
-  }
-});
-
-document.getElementById('next-chapter')?.addEventListener('click', () => {
-  const max = booksData[currentBook] || 50;
-  if (currentChapter < max) {
-    currentChapter++;
-    updateChapterSelect(currentBook, currentChapter);
-    loadChapter(currentBook, currentChapter);
-  }
-});
-
-// Parse URL params on load
-const urlParams = new URLSearchParams(window.location.search);
-const urlBook = urlParams.get('book');
-const urlChapter = parseInt(urlParams.get('chapter') || '23', 10);
-if (urlBook && booksData[urlBook]) {
-  currentBook = urlBook;
-  currentChapter = urlChapter;
-  updateChapterSelect(urlBook, urlChapter);
-  loadChapter(urlBook, urlChapter);
-}
-</script>
