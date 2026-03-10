@@ -1,75 +1,33 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import BibleNav from '../../../components/BibleNav.astro';
-import BibleReader from '../../../components/BibleReader.astro';
 import bibleStructure from '../../../data/bible-structure.json';
 
-export async function getStaticPaths() {
+// Lightweight redirect pages — send users to the SPA reader at /bible/#book/chapter
+export function getStaticPaths() {
   const paths = [];
   const allBooks = [...bibleStructure.testament.OT, ...bibleStructure.testament.NT];
-
   for (const book of allBooks) {
     for (let ch = 1; ch <= book.chapters; ch++) {
-      paths.push({
-        params: { book: book.slug, chapter: String(ch) },
-        props: { bookData: book },
-      });
+      paths.push({ params: { book: book.slug, chapter: String(ch) } });
     }
   }
-
   return paths;
 }
 
-const { book: bookSlug, chapter: chapterStr } = Astro.params;
-const { bookData } = Astro.props;
-const chapter = parseInt(chapterStr, 10);
-
-// Fetch from ESV API
-const ESV_TOKEN = 'e2ce4d1b60dc9181904eb7832e3e38c398d7c93c';
-const query = encodeURIComponent(`${bookData.name} ${chapter}`);
-const url = `https://api.esv.org/v3/passage/html/?q=${query}&include-headings=true&include-footnotes=false&include-verse-numbers=true&include-short-copyright=false&include-passage-horizontal-lines=false&include-heading-horizontal-lines=false`;
-
-let passageHtml = '';
-let wordCount = 0;
-let fetchError = false;
-
-try {
-  const resp = await fetch(url, {
-    headers: { Authorization: `Token ${ESV_TOKEN}` },
-  });
-  if (resp.ok) {
-    const data = await resp.json();
-    passageHtml = data.passages?.[0] ?? '';
-    // Strip the audio link and extra_text header from the passage
-    passageHtml = passageHtml.replace(/<small class="audio extra_text">.*?<\/small>/gs, '');
-    // Count words for reading estimate
-    const textContent = passageHtml.replace(/<[^>]+>/g, ' ');
-    wordCount = textContent.trim().split(/\s+/).length;
-  } else {
-    fetchError = true;
-  }
-} catch (e) {
-  fetchError = true;
-}
+const { book, chapter } = Astro.params;
+const target = `/the-upper-room/bible/#${book}/${chapter}`;
 ---
 
-<BaseLayout
-  title={`${bookData.name} ${chapter}`}
-  description={`Read ${bookData.name} chapter ${chapter} in the English Standard Version (ESV) Bible.`}
->
-  <BibleNav currentBook={bookSlug} currentChapter={chapter} />
-
-  {fetchError ? (
-    <div style="max-width: 70ch; margin: 4rem auto; text-align: center; padding: 2rem; color: #8b6353; font-family: 'EB Garamond', serif; font-size: 1.1rem; font-style: italic;">
-      <p>This passage could not be loaded at build time.</p>
-      <p style="font-size: 0.9rem; margin-top: 0.5rem;">Please try refreshing or visit later.</p>
-    </div>
-  ) : (
-    <BibleReader
-      passageHtml={passageHtml}
-      bookName={bookData.name}
-      chapter={chapter}
-      wordCount={wordCount}
-    />
-  )}
-</BaseLayout>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content={`0; url=${target}`} />
+  <title>Bible Reader — The Upper Room</title>
+  <link rel="manifest" href="/the-upper-room/manifest.json" />
+  <meta name="theme-color" content="#3d2b1f" />
+</head>
+<body style="background:#faf4e8; font-family:'EB Garamond',Georgia,serif; text-align:center; padding:3rem;">
+  <p style="color:#8a5225; font-style:italic;">Loading Bible reader…</p>
+  <script define:vars={{ target }}>window.location.replace(target);</script>
+</body>
+</html>
