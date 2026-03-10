@@ -193,15 +193,89 @@ const currentPath = Astro.url.pathname;
     </div>
   </footer>
 
+  <!-- PWA Install Prompt -->
+  <div
+    id="pwa-install-banner"
+    class="hidden fixed bottom-0 left-0 right-0 z-40 bg-brown-900 border-t border-parchment-800/30 px-4 py-3 md:py-4"
+    role="banner"
+    aria-label="Install app"
+  >
+    <div class="container-upper flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="text-gold-400 text-xl flex-shrink-0">✦</span>
+        <div>
+          <p class="text-parchment-100 text-sm font-display font-semibold leading-tight">Add to Home Screen</p>
+          <p class="text-parchment-400 text-xs">Read Scripture offline, anytime</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <button
+          id="pwa-install-btn"
+          class="px-4 py-2 bg-gold-500 text-brown-950 font-display font-semibold text-xs tracking-wide uppercase rounded-sm hover:bg-gold-400 transition-colors"
+        >
+          Install
+        </button>
+        <button
+          id="pwa-install-dismiss"
+          class="p-2 text-parchment-500 hover:text-parchment-300 transition-colors"
+          aria-label="Dismiss"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/the-upper-room/service-worker.js')
-          .then(reg => console.log('SW registered:', reg.scope))
-          .catch(err => console.log('SW registration failed:', err));
+          .then(reg => console.log('[SW] registered:', reg.scope))
+          .catch(err => console.log('[SW] registration failed:', err));
       });
     }
+  </script>
+
+  <!-- PWA Install Prompt logic -->
+  <script>
+    let deferredPrompt: any = null;
+    const banner = document.getElementById('pwa-install-banner');
+    const installBtn = document.getElementById('pwa-install-btn');
+    const dismissBtn = document.getElementById('pwa-install-dismiss');
+
+    // Only show if not already dismissed
+    const dismissed = sessionStorage.getItem('pwa-install-dismissed');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (!dismissed && banner) {
+        setTimeout(() => banner.classList.remove('hidden'), 3000);
+      }
+    });
+
+    installBtn?.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log('[PWA] install outcome:', outcome);
+      deferredPrompt = null;
+      banner?.classList.add('hidden');
+    });
+
+    dismissBtn?.addEventListener('click', () => {
+      banner?.classList.add('hidden');
+      sessionStorage.setItem('pwa-install-dismissed', '1');
+    });
+
+    // Hide after successful install
+    window.addEventListener('appinstalled', () => {
+      banner?.classList.add('hidden');
+      deferredPrompt = null;
+    });
   </script>
 
   <!-- Mobile menu & search toggle -->
@@ -216,6 +290,21 @@ const currentPath = Astro.url.pathname;
       mobileMenu?.classList.toggle('hidden');
     });
 
+    // Close mobile menu when clicking a link inside it
+    mobileMenu?.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
+
+    // Close mobile menu on outside click
+    document.addEventListener('click', (e) => {
+      if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+        const target = e.target as HTMLElement;
+        if (!mobileMenu.contains(target) && !mobileToggle?.contains(target)) {
+          mobileMenu.classList.add('hidden');
+        }
+      }
+    });
+
     searchToggle?.addEventListener('click', () => {
       searchOverlay?.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
@@ -225,6 +314,14 @@ const currentPath = Astro.url.pathname;
     searchClose?.addEventListener('click', () => {
       searchOverlay?.classList.add('hidden');
       document.body.style.overflow = '';
+    });
+
+    // Close search on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && searchOverlay && !searchOverlay.classList.contains('hidden')) {
+        searchOverlay.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
     });
 
     let pagefindLoaded = false;
