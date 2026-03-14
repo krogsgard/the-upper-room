@@ -1,7 +1,7 @@
-// The Upper Room — Service Worker v3
-// Shell precache + stale-while-revalidate + ESV API runtime cache
+// The Upper Room — Service Worker v4
+// Shell precache + stale-while-revalidate for content pages + cache-first for static assets
 
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const CACHE_NAME = `upper-room-${CACHE_VERSION}`;
 const OFFLINE_URL = '/the-upper-room/';
 
@@ -15,6 +15,17 @@ const SHELL_URLS = [
   '/the-upper-room/icons/icon-192.png',
   '/the-upper-room/icons/icon-512.png',
 ];
+
+// Content pages that use stale-while-revalidate (serve cached, update in background)
+const CONTENT_PATHS = [
+  '/the-upper-room/lent',
+  '/the-upper-room/studies',
+  '/the-upper-room/archive',
+];
+
+function isContentPage(pathname) {
+  return CONTENT_PATHS.some(p => pathname === p || pathname.startsWith(p + '/'));
+}
 
 // Install: pre-cache shell
 self.addEventListener('install', (event) => {
@@ -57,8 +68,30 @@ self.addEventListener('fetch', (event) => {
 
   const pathname = url.pathname;
 
-  // Navigation requests: network-first, fall back to cache then offline shell
+  // Navigation requests
   if (event.request.mode === 'navigate') {
+    // Content pages: stale-while-revalidate
+    // Serve cached version immediately; fetch fresh in background to update cache
+    if (isContentPage(pathname)) {
+      event.respondWith(
+        caches.open(CACHE_NAME).then(cache =>
+          cache.match(event.request).then(cached => {
+            // Always start a background network fetch to keep cache fresh
+            const networkFetch = fetch(event.request).then(response => {
+              if (response.ok) cache.put(event.request, response.clone());
+              return response;
+            }).catch(() => cached || caches.match(OFFLINE_URL));
+
+            // If cached: return immediately, network runs in background
+            // If not cached: wait for network
+            return cached || networkFetch;
+          })
+        )
+      );
+      return;
+    }
+
+    // Other navigation: network-first, fall back to cache then offline shell
     event.respondWith(
       fetch(event.request)
         .then((response) => {
@@ -93,6 +126,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Static assets: cache-first, update in background (stale-while-revalidate)
+  // Includes fonts, icons, Bible JSON cache — offline Bible reading preserved
   const isStaticAsset = /\.(css|js|png|svg|ico|woff2?|ttf|jpg|webp|json)(\?.*)?$/.test(pathname);
 
   if (isStaticAsset) {

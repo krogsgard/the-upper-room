@@ -1,12 +1,12 @@
 ---
 import quotes from '../data/quotes.json';
 
-// Select quote deterministically by day of year
+// Server-side fallback: pick by day of year (used for initial HTML render before JS hydrates)
 const now = new Date();
 const start = new Date(now.getFullYear(), 0, 0);
 const diff = now.getTime() - start.getTime();
 const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
-const quote = quotes[dayOfYear % quotes.length];
+const fallbackQuote = quotes[dayOfYear % quotes.length];
 
 const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -24,7 +24,7 @@ const dateStr = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate(
       <!-- Date & season label -->
       <div class="flex items-center justify-center gap-3 mb-8">
         <span class="text-gold-400 text-xs">✦</span>
-        <p class="text-label text-parchment-400">{dateStr}</p>
+        <p id="daily-quote-date" class="text-label text-parchment-400">{dateStr}</p>
         <span class="text-gold-400 text-xs">✦</span>
       </div>
 
@@ -33,23 +33,21 @@ const dateStr = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate(
 
       <!-- Quote text -->
       <blockquote class="border-none pl-0 not-italic">
-        <p class="font-serif text-2xl md:text-3xl lg:text-4xl text-parchment-100 leading-relaxed italic font-medium mb-8">
-          {quote.text}
+        <p id="daily-quote-text" class="font-serif text-2xl md:text-3xl lg:text-4xl text-parchment-100 leading-relaxed italic font-medium mb-8">
+          {fallbackQuote.text}
         </p>
         <footer class="flex flex-col items-center gap-1">
-          <cite class="font-display font-semibold text-parchment-200 not-italic text-lg">
-            {quote.author}
+          <cite id="daily-quote-author" class="font-display font-semibold text-parchment-200 not-italic text-lg">
+            {fallbackQuote.author}
           </cite>
-          {quote.source && (
-            <span class="text-parchment-500 text-sm">{quote.source}</span>
-          )}
+          <span id="daily-quote-source" class="text-parchment-500 text-sm">{fallbackQuote.source || ''}</span>
         </footer>
       </blockquote>
 
       <!-- Theme badge -->
       <div class="mt-8">
-        <span class="inline-block px-3 py-1 bg-parchment-800/20 border border-parchment-700/30 text-parchment-500 text-xs font-display tracking-widest uppercase rounded-sm">
-          {quote.theme}
+        <span id="daily-quote-theme" class="inline-block px-3 py-1 bg-parchment-800/20 border border-parchment-700/30 text-parchment-500 text-xs font-display tracking-widest uppercase rounded-sm">
+          {fallbackQuote.theme}
         </span>
       </div>
     </div>
@@ -58,3 +56,60 @@ const dateStr = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate(
   <!-- Gold bottom border -->
   <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent"></div>
 </section>
+
+<script define:vars={{ quotesData: quotes }}>
+  const QUOTES = quotesData;
+  const LS_KEY = 'upper-room-daily-quote';
+
+  function todayStr() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  function pickQuoteForToday() {
+    const today = todayStr();
+    try {
+      const stored = localStorage.getItem(LS_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.date === today && parsed.quoteIndex !== undefined) {
+          return QUOTES[parsed.quoteIndex % QUOTES.length];
+        }
+      }
+    } catch (_) {}
+
+    // New day — pick by day of year and store
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const dayOfYear = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+    const index = dayOfYear % QUOTES.length;
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify({ date: today, quoteIndex: index }));
+    } catch (_) {}
+    return QUOTES[index];
+  }
+
+  function updateDOM(quote: typeof QUOTES[0]) {
+    const textEl = document.getElementById('daily-quote-text');
+    const authorEl = document.getElementById('daily-quote-author');
+    const sourceEl = document.getElementById('daily-quote-source');
+    const themeEl = document.getElementById('daily-quote-theme');
+    const dateEl = document.getElementById('daily-quote-date');
+
+    if (textEl) textEl.textContent = quote.text;
+    if (authorEl) authorEl.textContent = quote.author;
+    if (sourceEl) sourceEl.textContent = quote.source || '';
+    if (themeEl) themeEl.textContent = quote.theme;
+
+    // Update date display to client's local date
+    if (dateEl) {
+      const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      const weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      const d = new Date();
+      dateEl.textContent = `${weekdays[d.getDay()]}, ${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    }
+  }
+
+  const quote = pickQuoteForToday();
+  updateDOM(quote);
+</script>

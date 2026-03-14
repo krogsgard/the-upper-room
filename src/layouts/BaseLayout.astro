@@ -67,6 +67,18 @@ const currentPath = Astro.url.pathname;
   <header class="sticky top-0 z-50 bg-brown-900 border-b border-parchment-800/30">
     <div class="container-upper">
       <nav class="flex items-center justify-between h-16">
+        <!-- Back button (hidden until JS confirms history exists) -->
+        <button
+          id="back-btn"
+          class="hidden mr-1 p-2 text-parchment-400 hover:text-parchment-100 transition-colors rounded"
+          aria-label="Go back"
+          onclick="history.back()"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+        </button>
+
         <!-- Wordmark -->
         <a href="/the-upper-room/" class="flex items-center gap-3 group">
           <span class="text-gold-400 text-xl">✦</span>
@@ -276,6 +288,14 @@ const currentPath = Astro.url.pathname;
       banner?.classList.add('hidden');
       deferredPrompt = null;
     });
+  </script>
+
+  <!-- Back button: show when navigation history exists -->
+  <script>
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn && window.history.length > 1) {
+      backBtn.classList.remove('hidden');
+    }
   </script>
 
   <!-- Mobile menu & search toggle -->
